@@ -8,7 +8,7 @@ plugins {
 	id 'com.diffplug.spotless' version '5.8.2'
 }
 
-group = "net.fabricmc"
+group = "org.quiltmc"
 version = "1.2.0"
 
 def ENV = System.getenv()
@@ -17,7 +17,7 @@ version = version + (ENV.GITHUB_ACTIONS ? "" : "+local")
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-archivesBaseName = "fabric-meta"
+archivesBaseName = "quilt-meta"
 
 repositories {
     mavenCentral()
@@ -53,7 +53,7 @@ spotless {
 }
 
 application {
-	mainClass = "net.fabricmc.meta.FabricMeta"
+	mainClass = "org.quiltmc.meta.QuiltMeta"
 }
 
 jar {
