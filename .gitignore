@@ -2,6 +2,7 @@
 /*
 
 # Folders
+!/codeformat
 !/gradle
 !/src
 !/.github
@@ -12,7 +13,7 @@
 !/gradle.properties
 !/gradlew
 !/gradlew.bat
-!/HEADER
+!/codeformat/FABRIC-HEADER
 !/LICENSE
 !/README.md
 !/settings.gradle
