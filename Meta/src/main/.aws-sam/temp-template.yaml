@@ -1,0 +1,17 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: quiltmc.Meta
+      CodeUri: C:\Users\Haven\Documents\Quilt\meta\Meta
+      Runtime: java8
+      Environment:
+        Variables:
+          META_LOADER: fabric-loader
+          META_MAVEN_URL: https://maven.fabricmc.net/
+          META_BUCKET: meta.quiltmc.org
+          META_INSTALLER: fabric-installer
+          META_GROUP: net.fabricmc
+          META_INTERMEDIARY: intermediary

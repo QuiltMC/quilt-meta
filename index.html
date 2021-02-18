@@ -1,0 +1,190 @@
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            a {
+                color: #000;
+                text-decoration: none;
+            }
+            b, thead {
+                font-weight: 700;
+            }
+            html {
+                background: #363e4c;
+            }
+            body {
+                font-family: monospace;
+                padding: 25px;
+            }
+            table {
+                background: #fff;
+                border-spacing: 0;
+                font-size: 14px;
+                width: 100%;
+                white-space: pre;
+                box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+            }
+            thead {
+                background: #1a202b;
+                color: #fff;
+            }
+            thead td {
+                border-bottom: 2px solid #000;
+                cursor: pointer;
+            }
+            tr + tr td {
+                border-top: 1px solid rgba(0, 0, 0, 0.25);
+            }
+            tr + tr td:first-of-type {
+                border-top: 1px solid rgba(0, 0, 0, 0.35);
+            }
+            td {
+                padding: 10px 15px;
+            }
+            tbody td:not(:first-of-type) {
+                background-color: rgba(255,255,255,0.925);
+            }
+            tbody tr:hover td:not(:first-of-type) {
+                background-color: rgba(255,255,255,0.85);
+            }
+            .method td:first-of-type {
+                text-align: center;
+                max-width: 90px;
+            }
+            tbody .method td:first-of-type {
+                font-weight: 700;
+                color: #fff;
+                text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
+                border-left: 6px solid rgba(0, 0, 0, 0.35);
+                border-right: 1px solid rgba(0, 0, 0, 0.15);
+            }
+            .GET {
+                background: #5a76ff;
+            }
+            .POST {
+                background: #5dca5d;
+            }
+            .PUT {
+                background: #d9cc00;
+            }
+            .PATCH {
+                background: #ef9a00;
+            }
+            .DELETE {
+                background: #e44848;
+            }
+            .HEAD, .TRACE, .OPTIONS, .CONNECT  {
+                background: #00b9b9;
+            }
+            .BEFORE, .AFTER {
+                background: #777;
+            }
+            .WEBSOCKET, .WS_BEFORE, .WS_AFTER {
+                background: #546E7A;
+            }
+        </style>
+        </head><body>
+            <table>
+                <thead>
+                    <tr class="method">
+                        <td width="105px">Method</td>
+                        <td>Path</td>
+                    </tr>
+                </thead>
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td><a href="https://meta.quiltmc.org/">/</a></td>
+                    </tr>
+
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td><a href="https://meta.quiltmc.org/v3/versions/game">/v3/versions</a></td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td><a href="https://meta.quiltmc.org/v3/versions/game">/v3/versions/game</a></td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td><a href="https://meta.quiltmc.org/v3/versions/game/intermediary">/v3/versions/game/intermediary</a></td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td><a href="https://meta.quiltmc.org/v3/versions/game/yarn">/v3/versions/game/yarn</a></td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td><a href="https://meta.quiltmc.org/v3/versions/installer">/v3/versions/installer</a></td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td><a href="https://meta.quiltmc.org/v3/versions/intermediary">/v3/versions/intermediary</a></td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td>/v3/versions/intermediary/:game_version</td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td><a href="https://meta.quiltmc.org/v3/versions/loader">/v3/versions/loader</a></td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td>/v3/versions/loader/:game_version</td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td>/v3/versions/loader/:game_version/:loader_version</td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td>/v3/versions/loader/:game_version/:loader_version/profile/json</td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td>/v3/versions/loader/:game_version/:loader_version/profile/zip</td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td><a href="https://meta.quiltmc.org/v3/versions/yarn">/v3/versions/yarn</a></td>
+                    </tr>
+                    
+                    <tr class="method GET">
+                        <td>GET</td>
+                        <td>/v3/versions/yarn/:game_version</td>
+                    </tr>
+                    
+                
+            </tbody></table>
+            <script>
+                const cachedRows = Array.from(document.querySelectorAll("tbody tr"));
+                const verbOrder = ["BEFORE", "GET", "POST", "PUT", "PATCH", "DELETE", "CONNECT", "OPTIONS", "TRACE", "HEAD", "AFTER", "WS_BEFORE", "WEBSOCKET", "WS_AFTER"];
+                document.querySelector("thead").addEventListener("click", function (e) {
+                    cachedRows.map(function (el) {
+                        return {key: el.children[e.target.cellIndex].textContent, row: el};
+                    }).sort((a, b) => {
+                        if (e.target.textContent === "Method") {
+                            return verbOrder.indexOf(a.key) - verbOrder.indexOf(b.key);
+                        }
+                        return a.key.localeCompare(b.key);
+                    }).forEach((pair, i) => {
+                        document.querySelector("tbody").children[i].outerHTML = pair.row.outerHTML
+                    });
+                });
+            </script>
+        
+    </body></html>
