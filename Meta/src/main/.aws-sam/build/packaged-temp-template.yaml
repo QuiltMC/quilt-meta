@@ -1,9 +1,0 @@
-Resources:
-  Function:
-    Type: AWS::Serverless::Function
-    Properties:
-      Timeout: 300
-      MemorySize: 128
-      Handler: quiltmc.Meta
-      CodeUri: s3://quiltmc-meta-deployment/153de4f9fb68bcb0ebe1628db5c70b06
-      Runtime: java8
