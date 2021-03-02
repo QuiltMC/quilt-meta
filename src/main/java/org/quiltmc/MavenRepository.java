@@ -1,4 +1,4 @@
-package quiltmc;
+package org.quiltmc;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;

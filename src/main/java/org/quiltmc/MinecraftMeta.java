@@ -1,4 +1,4 @@
-package quiltmc;
+package org.quiltmc;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

@@ -1,9 +1,6 @@
-package quiltmc;
+package org.quiltmc;
 
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class MetaTest {
   @Test

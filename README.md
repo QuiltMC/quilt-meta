@@ -4,7 +4,7 @@ Quilt Meta ia a json HTTP api that can be used to query meta data about Quilt pr
 
 It can be used by tools or launchers that wish to query version infomation about Quilt.
 
-Hosted at [https://meta.quiltmc.org/](https://meta.quiltmc.org/)
+Hosted at [https://meta.org.quiltmc.org/](https://meta.org.quiltmc.org/)
 
 ## Endpoints
 
@@ -64,11 +64,11 @@ Lists all of the intermediary versions
 ```json
 [
   {
-    "maven": "org.quiltmc:intermediary:1.14.3-pre3",
+    "maven": "org.org.quiltmc:intermediary:1.14.3-pre3",
     "version": "1.14.3-pre3"
   },
   {
-    "maven": "org.quiltmc:intermediary:1.14.3-pre2",
+    "maven": "org.org.quiltmc:intermediary:1.14.3-pre2",
     "version": "1.14.3-pre2"
   }
 ]
@@ -82,8 +82,8 @@ Lists all of the intermediary for the provided game version
 ```json
 [
   {
-    "maven": "org.quiltmc:intermediary:1.14",
-    "version": "1.14",
+    "maven": "org.org.quiltmc:intermediary:1.14",
+    "version": "1.14"
   }
 ]
 ```
@@ -98,14 +98,14 @@ Lists all of the yarn versions
     "gameVersion": "1.14.3-pre2",
     "separator": "+build.",
     "build": 10,
-    "maven": "org.quiltmc:yarn:1.14.3-pre2+build.10",
+    "maven": "org.org.quiltmc:yarn:1.14.3-pre2+build.10",
     "version": "1.14.3-pre2+build.10"
   },
   {
     "gameVersion": "1.14.3-pre2",
     "separator": "+build.",
     "build": 9,
-    "maven": "org.quiltmc:yarn:1.14.3-pre2+build.9",
+    "maven": "org.org.quiltmc:yarn:1.14.3-pre2+build.9",
     "version": "1.14.3-pre2+build.9"
   }
 ]
@@ -122,14 +122,14 @@ Lists all of the yarn versions for the provided game version
     "gameVersion": "1.14.2",
     "separator": "+build.",
     "build": 7,
-    "maven": "org.quiltmc:yarn:1.14.2+build.7",
+    "maven": "org.org.quiltmc:yarn:1.14.2+build.7",
     "version": "1.14.2+build.7"
   },
   {
     "gameVersion": "1.14.2",
     "separator": "+build.",
     "build": 6,
-    "maven": "org.quiltmc:yarn:1.14.2+build.6",
+    "maven": "org.org.quiltmc:yarn:1.14.2+build.6",
     "version": "1.14.2+build.6"
   }
 ]
@@ -145,13 +145,13 @@ Lists all of the loader versions
   {
     "separator": "+build.",
     "build": 132,
-    "maven": "org.quiltmc:quilt-loader:0.4.2+build.132",
+    "maven": "org.org.quiltmc:quilt-loader:0.4.2+build.132",
     "version": "0.4.2+build.132"
   },
   {
     "separator": "+build.",
     "build": 131,
-    "maven": "org.quiltmc:quilt-loader:0.4.2+build.131",
+    "maven": "org.org.quiltmc:quilt-loader:0.4.2+build.131",
     "version": "0.4.2+build.131"
   }
 ]
@@ -167,11 +167,11 @@ This returns a list of all the compatible loader versions for a given version of
     "loader": {
       "separator": "+build.",
       "build": 155,
-      "maven": "org.quiltmc:quilt-loader:0.4.8+build.155",
+      "maven": "org.org.quiltmc:quilt-loader:0.4.8+build.155",
       "version": "0.4.8+build.155"
     },
     "intermediary": {
-      "maven": "org.quiltmc:intermediary:1.14",
+      "maven": "org.org.quiltmc:intermediary:1.14",
       "version": "1.14"
     }
   },
@@ -179,11 +179,11 @@ This returns a list of all the compatible loader versions for a given version of
     "loader": {
       "separator": "+build.",
       "build": 154,
-      "maven": "org.quiltmc:quilt-loader:0.4.8+build.154",
+      "maven": "org.org.quiltmc:quilt-loader:0.4.8+build.154",
       "version": "0.4.8+build.154"
     },
     "intermediary": {
-      "maven": "org.quiltmc:intermediary:1.14",
+      "maven": "org.org.quiltmc:intermediary:1.14",
       "version": "1.14"
     }
   }
@@ -202,11 +202,11 @@ This returns the best intermediary for the supplied minecraft version, as well a
   "loader": {
     "separator": "+build.",
     "build": 155,
-    "maven": "org.quiltmc:quilt-loader:0.4.8+build.155",
+    "maven": "org.org.quiltmc:quilt-loader:0.4.8+build.155",
     "version": "0.4.8+build.155"
   },
   "intermediary": {
-    "maven": "org.quiltmc:intermediary:1.14",
+    "maven": "org.org.quiltmc:intermediary:1.14",
     "version": "1.14"
   },
   "launcherMeta": {
@@ -217,57 +217,57 @@ This returns the best intermediary for the supplied minecraft version, as well a
       ],
       "common": [
         {
-          "name": "org.quiltmc:tiny-mappings-parser:0.1.1.8",
-          "url": "https://maven.quiltmc.org/"
+          "name": "org.org.quiltmc:tiny-mappings-parser:0.1.1.8",
+          "url": "https://maven.org.quiltmc.org/"
         },
         {
-          "name": "org.quiltmc:sponge-mixin:0.7.11.36",
-          "url": "https://maven.quiltmc.org/"
+          "name": "org.org.quiltmc:sponge-mixin:0.7.11.36",
+          "url": "https://maven.org.quiltmc.org/"
         },
         {
-          "name": "org.quiltmc:tiny-remapper:0.1.0.33",
-          "url": "https://maven.quiltmc.org/"
+          "name": "org.org.quiltmc:tiny-remapper:0.1.0.33",
+          "url": "https://maven.org.quiltmc.org/"
         },
         {
-          "name": "org.quiltmc:quilt-loader-sat4j:2.3.5.4",
-          "url": "https://maven.quiltmc.org/"
+          "name": "org.org.quiltmc:quilt-loader-sat4j:2.3.5.4",
+          "url": "https://maven.org.quiltmc.org/"
         },
         {
           "name": "com.google.jimfs:jimfs:1.1",
-          "url": "https://maven.quiltmc.org/"
+          "url": "https://maven.org.quiltmc.org/"
         },
         {
           "name": "org.ow2.asm:asm:7.1",
-          "url": "https://maven.quiltmc.org/"
+          "url": "https://maven.org.quiltmc.org/"
         },
         {
           "name": "org.ow2.asm:asm-analysis:7.1",
-          "url": "https://maven.quiltmc.org/"
+          "url": "https://maven.org.quiltmc.org/"
         },
         {
           "name": "org.ow2.asm:asm-commons:7.1",
-          "url": "https://maven.quiltmc.org/"
+          "url": "https://maven.org.quiltmc.org/"
         },
         {
           "name": "org.ow2.asm:asm-tree:7.1",
-          "url": "https://maven.quiltmc.org/"
+          "url": "https://maven.org.quiltmc.org/"
         },
         {
           "name": "org.ow2.asm:asm-util:7.1",
-          "url": "https://maven.quiltmc.org/"
+          "url": "https://maven.org.quiltmc.org/"
         }
       ],
       "server": [
         {
           "_comment": "jimfs in quilt-server-launch requires guava on the system classloader",
           "name": "com.google.guava:guava:21.0",
-          "url": "https://maven.quiltmc.org/"
+          "url": "https://maven.org.quiltmc.org/"
         }
       ]
     },
     "mainClass": {
-      "client": "org.quiltmc.loader.launch.knot.KnotClient",
-      "server": "org.quiltmc.loader.launch.knot.KnotServer"
+      "client": "org.org.quiltmc.loader.launch.knot.KnotClient",
+      "server": "org.org.quiltmc.loader.launch.knot.KnotServer"
     }
   }
 }
