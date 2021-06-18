@@ -279,7 +279,7 @@ Returns the json file that should be used in the standard minecraft launcher
 
 ## /v3/versions/loader/:game_version/:loader_version/profile/zip
 
-Downloads a zip file with the launcher's profile json, and the dummy jar. TO be extracted into .minecraft/versions
+Downloads a zip file with the launcher's profile json and the dummy jar to be extracted into .minecraft/versions
 
 ## /v3/versions/loader/:game_version/:loader_version/server/json
 
