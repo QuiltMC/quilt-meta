@@ -50,7 +50,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
 
             CompletableFuture.allOf(
                     CompletableFuture.runAsync(this::populateMappings, executor),
-                    CompletableFuture.runAsync(this::populateYarn, executor),
+                    CompletableFuture.runAsync(this::populateQuiltMappings, executor),
                     CompletableFuture.runAsync(this::populateInstaller, executor),
                     CompletableFuture.runAsync(this.populateLoader(executor), executor),
                     this.populateIntermediaryAndGame(executor)
@@ -90,7 +90,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
 
     private void populateMappings()  {
         try {
-            JsonArray mappings = toJson(this.maven.getMetadata(this.group, "yarn"),
+            JsonArray mappings = toJson(this.maven.getMetadata(this.group, "quilt-mappings"),
                     version -> new JsonPrimitive(stripInfo(version.version)));
             this.arrays.put("mappings", mappings);
 
@@ -99,13 +99,13 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
         }
     }
 
-    private void populateYarn() {
-        Collection<String> gameYarn = new LinkedHashSet<>();
-        JsonArray yarn = new JsonArray();
-        Map<String, JsonArray> yarnVersions = new HashMap<>();
+    private void populateQuiltMappings() {
+        Collection<String> gameVersions = new LinkedHashSet<>();
+        JsonArray qm = new JsonArray();
+        Map<String, JsonArray> qmVersions = new HashMap<>();
 
         try {
-            for (MavenRepository.ArtifactMetadata.Artifact artifact : this.maven.getMetadata(this.group, "yarn")) {
+            for (MavenRepository.ArtifactMetadata.Artifact artifact : this.maven.getMetadata(this.group, "quilt-mappings")) {
                 JsonObject object = new JsonObject();
 
                 String gameVersion = stripInfo(artifact.version);
@@ -115,23 +115,23 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
                 object.addProperty("maven", artifact.mavenId());
                 object.addProperty("version", artifact.version);
 
-                yarn.add(object);
-                gameYarn.add(gameVersion);
-                yarnVersions.computeIfAbsent(gameVersion, v -> new JsonArray()).add(object);
+                qm.add(object);
+                gameVersions.add(gameVersion);
+                qmVersions.computeIfAbsent(gameVersion, v -> new JsonArray()).add(object);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         JsonArray array = new JsonArray();
-        gameYarn.forEach(array::add);
+        gameVersions.forEach(array::add);
 
-        this.arrays.put("mappings", yarn);
-        this.upload("v3/versions/game/yarn", this.gson.toJson(array));
-        this.upload("v3/versions/yarn", this.gson.toJson(yarn));
+        this.arrays.put("mappings", qm);
+        this.upload("v3/versions/game/quilt-mappings", this.gson.toJson(array));
+        this.upload("v3/versions/quilt-mappings", this.gson.toJson(qm));
 
-        for (Map.Entry<String, JsonArray> entry : yarnVersions.entrySet()) {
-            this.upload("v3/versions/yarn/" + entry.getKey(), this.gson.toJson(entry.getValue()));
+        for (Map.Entry<String, JsonArray> entry : qmVersions.entrySet()) {
+            this.upload("v3/versions/quilt-mappings/" + entry.getKey(), this.gson.toJson(entry.getValue()));
         }
     }
 
@@ -209,6 +209,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
         this.upload("v3/versions/loader", this.gson.toJson(loader));
     }
 
+    // TODO: Change intermediary to hashed-mojmap
     private CompletableFuture<Void> populateIntermediaryAndGame(Executor executor) {
         Collection<String> gameIntermediary = new LinkedHashSet<>();
         JsonArray intermediary = new JsonArray();
