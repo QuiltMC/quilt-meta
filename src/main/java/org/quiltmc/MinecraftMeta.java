@@ -30,13 +30,13 @@ public class MinecraftMeta {
     @SuppressWarnings({"unused", "MismatchedQueryAndUpdateOfCollection"})
     private List<Version> versions;
 
-    public static JsonArray get(MavenRepository.ArtifactMetadata intermediaries, Gson gson) {
+    public static JsonArray get(MavenRepository.ArtifactMetadata hashedMojmap, Gson gson) {
         JsonArray versions = new JsonArray();
 
         MinecraftMeta meta = gson.fromJson(new URLReader(MANIFEST), MinecraftMeta.class);
 
         for (Version version : meta.versions) {
-            if (intermediaries.contains(version.id)) {
+            if (hashedMojmap.contains(version.id)) {
                 JsonObject object = new JsonObject();
 
                 object.addProperty("version", version.id);
