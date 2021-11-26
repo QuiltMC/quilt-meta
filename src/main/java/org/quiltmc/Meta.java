@@ -115,9 +115,10 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
                 object.addProperty("build", Integer.parseInt(artifact.version.substring(artifact.version.lastIndexOf(".") + 1)));
                 object.addProperty("maven", artifact.mavenId());
                 object.addProperty("version", artifact.version);
-                object.addProperty("hashed", this.gameHashedMojmap.keySet().stream()
-                        .filter(v -> v.contains(gameVersion))
-                        .findFirst().orElse(null));
+
+                this.gameHashedMojmap.keySet().stream()
+                        .filter(v1 -> v1.contains(gameVersion))
+                        .findFirst().ifPresent(s -> object.addProperty("hashed", s));
 
                 qm.add(object);
                 gameVersions.add(gameVersion);
