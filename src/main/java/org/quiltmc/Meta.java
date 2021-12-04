@@ -30,7 +30,6 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final MavenRepository maven = new MavenRepository(System.getenv("META_MAVEN_URL"));
-    private final MavenRepository mavenSnapshot = new MavenRepository(System.getenv("META_SNAPSHOTS_URL"));
     private final String group = System.getenv("META_GROUP");
     private final Map<String, JsonArray> arrays = new ConcurrentHashMap<>();
     private final Map<String, JsonElement> launcherMetaData = new ConcurrentHashMap<>();
@@ -116,9 +115,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
                 object.addProperty("maven", artifact.mavenId());
                 object.addProperty("version", artifact.version);
 
-                this.gameHashedMojmap.keySet().stream()
-                        .filter(v1 -> v1.contains(gameVersion))
-                        .findFirst().ifPresent(s -> object.addProperty("hashed", s));
+                object.addProperty("hashed", gameVersion);
 
                 qm.add(object);
                 gameVersions.add(gameVersion);
@@ -220,7 +217,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
         Map<String, JsonArray> hashedVersions = new HashMap<>();
 
         try {
-            MavenRepository.ArtifactMetadata hashedMojmap = this.mavenSnapshot/*FIXME on 30/11/2021*/.getMetadata(this.group, "hashed");
+            MavenRepository.ArtifactMetadata hashedMojmap = this.maven.getMetadata(this.group, "hashed");
 
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
                 JsonArray meta = MinecraftMeta.get(hashedMojmap, gson);
@@ -301,7 +298,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
                     JsonArray libraries = new JsonArray();
 
                     libraries.addAll(launcherMeta.get("libraries").getAsJsonObject().get("common").getAsJsonArray());
-                    libraries.add(getLibrary(hashed.get("maven").getAsString(), this.mavenSnapshot.url));
+                    libraries.add(getLibrary(hashed.get("maven").getAsString(), this.maven.url));
                     libraries.add(getLibrary(loaderVersionElement.getAsJsonObject().get("maven").getAsString(), this.maven.url));
 
                     if (launcherMeta.get("libraries").getAsJsonObject().has(side.side)) {
