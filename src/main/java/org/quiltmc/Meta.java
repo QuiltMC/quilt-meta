@@ -33,7 +33,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
     private final String group = System.getenv("META_GROUP");
     private final Map<String, JsonArray> arrays = new ConcurrentHashMap<>();
     private final Map<String, JsonElement> launcherMetaData = new ConcurrentHashMap<>();
-    private final Map<String, JsonObject> gameIntermediaries = new ConcurrentHashMap<>();
+    private final Map<String, JsonObject> gameHashedMojmap = new ConcurrentHashMap<>();
     private final Deque<MavenRepository.ArtifactMetadata.Artifact> loaderVersions = new ConcurrentLinkedDeque<>();
     private final Map<String, Pair<byte[], String>> files = new ConcurrentHashMap<>();
 
@@ -49,11 +49,11 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
             ExecutorService executor = Executors.newCachedThreadPool();
 
             CompletableFuture.allOf(
+                    this.populateHashedMojmapAndGame(executor),
                     CompletableFuture.runAsync(this::populateMappings, executor),
-                    CompletableFuture.runAsync(this::populateYarn, executor),
+                    CompletableFuture.runAsync(this::populateQuiltMappings, executor),
                     CompletableFuture.runAsync(this::populateInstaller, executor),
-                    CompletableFuture.runAsync(this.populateLoader(executor), executor),
-                    this.populateIntermediaryAndGame(executor)
+                    CompletableFuture.runAsync(this.populateLoader(executor), executor)
             ).join();
 
             System.out.println("Building loader stuff");
@@ -65,7 +65,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
 
             versions.add("game", this.arrays.get("game"));
             versions.add("mappings", this.arrays.get("mappings"));
-            versions.add("intermediary", this.arrays.get("intermediary"));
+            versions.add("hashed", this.arrays.get("hashed"));
             versions.add("loader", this.arrays.get("loader"));
             versions.add("installer", this.arrays.get("installer"));
 
@@ -90,7 +90,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
 
     private void populateMappings()  {
         try {
-            JsonArray mappings = toJson(this.maven.getMetadata(this.group, "yarn"),
+            JsonArray mappings = toJson(this.maven.getMetadata(this.group, "quilt-mappings"),
                     version -> new JsonPrimitive(stripInfo(version.version)));
             this.arrays.put("mappings", mappings);
 
@@ -99,13 +99,13 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
         }
     }
 
-    private void populateYarn() {
-        Collection<String> gameYarn = new LinkedHashSet<>();
-        JsonArray yarn = new JsonArray();
-        Map<String, JsonArray> yarnVersions = new HashMap<>();
+    private void populateQuiltMappings() {
+        Collection<String> gameVersions = new LinkedHashSet<>();
+        JsonArray qm = new JsonArray();
+        Map<String, JsonArray> qmVersions = new HashMap<>();
 
         try {
-            for (MavenRepository.ArtifactMetadata.Artifact artifact : this.maven.getMetadata(this.group, "yarn")) {
+            for (MavenRepository.ArtifactMetadata.Artifact artifact : this.maven.getMetadata(this.group, "quilt-mappings")) {
                 JsonObject object = new JsonObject();
 
                 String gameVersion = stripInfo(artifact.version);
@@ -115,23 +115,25 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
                 object.addProperty("maven", artifact.mavenId());
                 object.addProperty("version", artifact.version);
 
-                yarn.add(object);
-                gameYarn.add(gameVersion);
-                yarnVersions.computeIfAbsent(gameVersion, v -> new JsonArray()).add(object);
+                object.addProperty("hashed", gameVersion);
+
+                qm.add(object);
+                gameVersions.add(gameVersion);
+                qmVersions.computeIfAbsent(gameVersion, v -> new JsonArray()).add(object);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         JsonArray array = new JsonArray();
-        gameYarn.forEach(array::add);
+        gameVersions.forEach(array::add);
 
-        this.arrays.put("mappings", yarn);
-        this.upload("v3/versions/game/yarn", this.gson.toJson(array));
-        this.upload("v3/versions/yarn", this.gson.toJson(yarn));
+        this.arrays.put("mappings", qm);
+        this.upload("v3/versions/game/quilt-mappings", this.gson.toJson(array));
+        this.upload("v3/versions/quilt-mappings", this.gson.toJson(qm));
 
-        for (Map.Entry<String, JsonArray> entry : yarnVersions.entrySet()) {
-            this.upload("v3/versions/yarn/" + entry.getKey(), this.gson.toJson(entry.getValue()));
+        for (Map.Entry<String, JsonArray> entry : qmVersions.entrySet()) {
+            this.upload("v3/versions/quilt-mappings/" + entry.getKey(), this.gson.toJson(entry.getValue()));
         }
     }
 
@@ -209,41 +211,41 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
         this.upload("v3/versions/loader", this.gson.toJson(loader));
     }
 
-    private CompletableFuture<Void> populateIntermediaryAndGame(Executor executor) {
-        Collection<String> gameIntermediary = new LinkedHashSet<>();
-        JsonArray intermediary = new JsonArray();
-        Map<String, JsonArray> intermediaryVersions = new HashMap<>();
+    private CompletableFuture<Void> populateHashedMojmapAndGame(Executor executor) {
+        Collection<String> gameHashed = new LinkedHashSet<>();
+        JsonArray hashed = new JsonArray();
+        Map<String, JsonArray> hashedVersions = new HashMap<>();
 
         try {
-            MavenRepository.ArtifactMetadata intermediaries = this.maven.getMetadata(this.group, "intermediary");
+            MavenRepository.ArtifactMetadata hashedMojmap = this.maven.getMetadata(this.group, "hashed");
 
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                JsonArray meta = MinecraftMeta.get(intermediaries, gson);
+                JsonArray meta = MinecraftMeta.get(hashedMojmap, gson);
                 this.arrays.put("game", meta);
                 this.upload("v3/versions/game", this.gson.toJson(meta));
             }, executor);
 
-            for (MavenRepository.ArtifactMetadata.Artifact artifact : intermediaries) {
+            for (MavenRepository.ArtifactMetadata.Artifact artifact : hashedMojmap) {
                 JsonObject object = new JsonObject();
 
                 object.addProperty("maven", artifact.mavenId());
                 object.addProperty("version", artifact.version);
 
-                intermediary.add(object);
-                gameIntermediary.add(artifact.version);
-                this.gameIntermediaries.putIfAbsent(artifact.version, object);
-                intermediaryVersions.computeIfAbsent(artifact.version, v -> new JsonArray()).add(object);
+                hashed.add(object);
+                gameHashed.add(artifact.version);
+                this.gameHashedMojmap.putIfAbsent(artifact.version, object);
+                hashedVersions.computeIfAbsent(artifact.version, v -> new JsonArray()).add(object);
             }
 
             JsonArray array = new JsonArray();
-            gameIntermediary.forEach(array::add);
+            gameHashed.forEach(array::add);
 
-            this.arrays.put("intermediary", intermediary);
-            this.upload("v3/versions/game/intermediary", this.gson.toJson(array));
-            this.upload("v3/versions/intermediary", this.gson.toJson(intermediary));
+            this.arrays.put("hashed", hashed);
+            this.upload("v3/versions/game/hashed", this.gson.toJson(array));
+            this.upload("v3/versions/hashed", this.gson.toJson(hashed));
 
-            for (Map.Entry<String, JsonArray> entry : intermediaryVersions.entrySet()) {
-                this.upload("v3/versions/intermediary/" + entry.getKey(), this.gson.toJson(entry.getValue()));
+            for (Map.Entry<String, JsonArray> entry : hashedVersions.entrySet()) {
+                this.upload("v3/versions/hashed/" + entry.getKey(), this.gson.toJson(entry.getValue()));
             }
 
             return future;
@@ -263,7 +265,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
                 JsonObject object = new JsonObject();
 
                 object.add("loader", loaderVersionElement);
-                object.add("intermediary", this.gameIntermediaries.get(gameVersion));
+                object.add("hashed", this.gameHashedMojmap.get(gameVersion));
                 object.add("launcherMeta", this.launcherMetaData.get(
                         loaderVersionElement.getAsJsonObject().get("maven").getAsString()
                 ));
@@ -287,7 +289,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
                 for (JsonElement loaderVersionElement : this.arrays.get("loader")) {
                     String loaderVersion = loaderVersionElement.getAsJsonObject().get("version").getAsString();
 
-                    JsonObject intermediary = this.gameIntermediaries.get(gameVersion);
+                    JsonObject hashed = this.gameHashedMojmap.get(gameVersion);
 
                     JsonObject launcherMeta = this.launcherMetaData.get(
                             loaderVersionElement.getAsJsonObject().get("maven").getAsString()
@@ -296,7 +298,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
                     JsonArray libraries = new JsonArray();
 
                     libraries.addAll(launcherMeta.get("libraries").getAsJsonObject().get("common").getAsJsonArray());
-                    libraries.add(getLibrary(intermediary.get("maven").getAsString(), this.maven.url));
+                    libraries.add(getLibrary(hashed.get("maven").getAsString(), this.maven.url));
                     libraries.add(getLibrary(loaderVersionElement.getAsJsonObject().get("maven").getAsString(), this.maven.url));
 
                     if (launcherMeta.get("libraries").getAsJsonObject().has(side.side)) {
