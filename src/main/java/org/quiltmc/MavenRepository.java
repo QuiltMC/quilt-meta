@@ -45,10 +45,11 @@ public class MavenRepository {
             versions.clear();
             versions.addAll(list);
 
-            return versions;
         } catch (IOException | XMLStreamException e){
-            throw new IOException("Failed to load " + path, e);
+            System.out.println("Failed to load " + path + ": " + e);
         }
+
+        return versions;
     }
 
     public class ArtifactMetadata implements Iterable<ArtifactMetadata.Artifact> {
