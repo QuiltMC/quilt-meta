@@ -320,9 +320,9 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
                         object.addProperty("mainClass", launcherMeta.get("mainClass").getAsJsonObject().get(side.side).getAsString());
                     }
 
-                    if (side == Side.SERVER && launcherMeta.has("mainClass") && launcherMeta.get("mainClass").getAsJsonObject().has("launcherMainClass")) {
+                    if (side == Side.SERVER && launcherMeta.has("mainClass") && launcherMeta.get("mainClass").getAsJsonObject().has("serverLauncher")) {
                         // Add the server launch main class
-                        object.addProperty("launcherMainClass", launcherMeta.get("mainClass").getAsJsonObject().get("launcherMainClass").getAsString());
+                        object.addProperty("launcherMainClass", launcherMeta.get("mainClass").getAsJsonObject().get("serverLauncher").getAsString());
                     }
 
                     object.add("arguments", arguments);
