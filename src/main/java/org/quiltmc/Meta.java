@@ -306,6 +306,7 @@ public class Meta implements RequestHandler<APIGatewayProxyRequestEvent, APIGate
 
                 object.add("loader", loaderVersionElement);
                 object.add("hashed", this.gameHashedMojmap.get(gameVersion));
+                object.add("intermediary", this.gameIntermediaries.get(gameVersion));
                 object.add("launcherMeta", this.launcherMetaData.get(
                         loaderVersionElement.getAsJsonObject().get("maven").getAsString()
                 ));
