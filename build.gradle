@@ -10,10 +10,10 @@ repositories {
 }
 
 dependencies {
-    implementation "com.google.code.gson:gson:2.8.6"
-    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
-    implementation 'com.amazonaws:aws-lambda-java-events:3.6.0'
-    implementation platform('software.amazon.awssdk:bom:2.15.15')
-    implementation 'software.amazon.awssdk:s3'
-    testImplementation 'junit:junit:4.13.1'
+    implementation "com.google.code.gson:gson:${project.gson}"
+    implementation "com.amazonaws:aws-lambda-java-core:${project.java_core}"
+    implementation "com.amazonaws:aws-lambda-java-events:${project.java_events}"
+    implementation platform("software.amazon.awssdk:bom:${project.awssdk}")
+    implementation "software.amazon.awssdk:s3"
+    testImplementation "junit:junit:${project.junit}"
 }
