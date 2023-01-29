@@ -1,3 +1,11 @@
+# :warning: Archival Notice
+
+As of January 2023, we've switched away from this AWS Lambda + S3 based setup to GitHub Actions + B2, for cost reduction reasons.
+
+**The new code can be found in [QuiltMC/update-quilt-meta](https://github.com/QuiltMC/update-quilt-meta).**
+
+The content of the Readme has been kept underneath for archival purposes.
+
 # quilt-meta
 
 Quilt Meta ia a json HTTP api that can be used to query meta data about Quilt projects.
